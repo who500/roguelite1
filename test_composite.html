@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Assembled Cottage & Objects Test</title>
+  <style>
+    body { background: #1b261b; color: #fff; font-family: monospace; padding: 20px; }
+    canvas { background: #477d34; image-rendering: pixelated; margin: 10px; border: 2px solid #deb865; }
+  </style>
+</head>
+<body>
+  <h2>Perfect Assembled Cottage & Trees</h2>
+  <div id="out"></div>
+
+  <script>
+    const roofImg = new Image(); roofImg.src = 'assets/sprout/wooden_house_roof_tilset.png';
+    const wallImg = new Image(); wallImg.src = 'assets/sprout/wooden_house_walls_tilset.png';
+    const houseImg = new Image(); houseImg.src = 'assets/sprout/wooden_house.png';
+    const biomImg = new Image(); biomImg.src = 'assets/sprout/basic_grass_biom_things.png';
+    const coopImg = new Image(); coopImg.src = 'assets/sprout/free_chicken_house.png';
+
+    let count = 0;
+    const onL = () => { count++; if (count === 5) render(); };
+    roofImg.onload = onL; wallImg.onload = onL; houseImg.onload = onL; biomImg.onload = onL; coopImg.onload = onL;
+
+    function render() {
+      const out = document.getElementById('out');
+
+      // 1. Assembled 4x4 Cottage (64x64 px)
+      const c = document.createElement('canvas');
+      c.width = 64 * 3; c.height = 64 * 3;
+      const ctx = c.getContext('2d');
+      ctx.imageSmoothingEnabled = false;
+      ctx.scale(3, 3);
+
+      // Chimney
+      ctx.drawImage(roofImg, 4*16, 0, 16, 16, 3*16, 0, 16, 16);
+
+      // Roof (Cols 3..6 from wooden_house_roof_tilset.png)
+      // Top row
+      ctx.drawImage(roofImg, 3*16, 1*16, 16, 16, 0*16, 0*16, 16, 16);
+      ctx.drawImage(roofImg, 4*16, 1*16, 16, 16, 1*16, 0*16, 16, 16);
+      ctx.drawImage(roofImg, 5*16, 1*16, 16, 16, 2*16, 0*16, 16, 16);
+      ctx.drawImage(roofImg, 6*16, 1*16, 16, 16, 3*16, 0*16, 16, 16);
+
+      // Mid row
+      ctx.drawImage(roofImg, 3*16, 2*16, 16, 16, 0*16, 1*16, 16, 16);
+      ctx.drawImage(roofImg, 4*16, 2*16, 16, 16, 1*16, 1*16, 16, 16);
+      ctx.drawImage(roofImg, 5*16, 2*16, 16, 16, 2*16, 1*16, 16, 16);
+      ctx.drawImage(roofImg, 6*16, 2*16, 16, 16, 3*16, 1*16, 16, 16);
+
+      // Eaves
+      ctx.drawImage(roofImg, 3*16, 4*16, 16, 16, 0*16, 2*16, 16, 16);
+      ctx.drawImage(roofImg, 4*16, 4*16, 16, 16, 1*16, 2*16, 16, 16);
+      ctx.drawImage(roofImg, 5*16, 4*16, 16, 16, 2*16, 2*16, 16, 16);
+      ctx.drawImage(roofImg, 6*16, 4*16, 16, 16, 3*16, 2*16, 16, 16);
+
+      // Walls
+      // Left pillar
+      ctx.drawImage(wallImg, 1*16, 1*16, 16, 16, 0*16, 3*16, 16, 16);
+      // Window
+      ctx.drawImage(houseImg, 1*16, 3*16, 16, 16, 1*16, 3*16, 16, 16);
+      // Door
+      ctx.drawImage(houseImg, 3*16, 2*16, 16, 16, 2*16, 3*16, 16, 16);
+      // Right pillar
+      ctx.drawImage(wallImg, 3*16, 1*16, 16, 16, 3*16, 3*16, 16, 16);
+
+      out.appendChild(c);
+
+      // 2. Oak Tree (48x48)
+      const tc = document.createElement('canvas');
+      tc.width = 48 * 3; tc.height = 48 * 3;
+      const tctx = tc.getContext('2d');
+      tctx.imageSmoothingEnabled = false;
+      tctx.scale(3, 3);
+      tctx.drawImage(biomImg, 0, 0, 48, 48, 0, 0, 48, 48);
+      out.appendChild(tc);
+
+      // 3. Chicken Coop
+      const cc = document.createElement('canvas');
+      cc.width = 48 * 3; cc.height = 48 * 3;
+      const cctx = cc.getContext('2d');
+      cctx.imageSmoothingEnabled = false;
+      cctx.scale(3, 3);
+      cctx.drawImage(coopImg, 0, 0, 48, 48, 0, 0, 48, 48);
+      out.appendChild(cc);
+    }
+  </script>
+</body>
+</html>

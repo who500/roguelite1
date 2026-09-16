@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sheet Inspector</title>
+  <style>
+    body { background: #222; color: #fff; font-family: monospace; padding: 20px; }
+    .sheet-card { margin-bottom: 30px; border: 1px solid #555; padding: 10px; background: #333; }
+    canvas { background: #444; image-rendering: pixelated; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Sprout Lands Sheet Inspector</h1>
+  <div id="container"></div>
+
+  <script>
+    const sheets = [
+      'basic_grass_biom_things.png',
+      'fences.png',
+      'free_chicken_house.png',
+      'grass.png',
+      'paths.png',
+      'tilled_dirt.png',
+      'water.png',
+      'wooden_house.png',
+      'wood_bridge.png'
+    ];
+
+    const c = document.getElementById('container');
+
+    sheets.forEach(name => {
+      const img = new Image();
+      img.src = 'assets/sprout/' + name;
+      img.onload = () => {
+        const card = document.createElement('div');
+        card.className = 'sheet-card';
+        card.innerHTML = `<h3>${name} (${img.width}x${img.height}) - Tiles: ${img.width/16}x${img.height/16}</h3>`;
+
+        const canvas = document.createElement('canvas');
+        const zoom = 3;
+        canvas.width = img.width * zoom;
+        canvas.height = img.height * zoom;
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = false;
+
+        // Draw zoomed image
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        // Draw 16x16 grid with labels
+        ctx.strokeStyle = 'rgba(255, 0, 0, 0.6)';
+        ctx.lineWidth = 1;
+        ctx.fillStyle = '#ffff00';
+        ctx.font = '9px monospace';
+
+        for (let x = 0; x < img.width; x += 16) {
+          ctx.beginPath();
+          ctx.moveTo(x * zoom, 0);
+          ctx.lineTo(x * zoom, canvas.height);
+          ctx.stroke();
+        }
+        for (let y = 0; y < img.height; y += 16) {
+          ctx.beginPath();
+          ctx.moveTo(0, y * zoom);
+          ctx.lineTo(canvas.width, y * zoom);
+          ctx.stroke();
+        }
+
+        for (let y = 0; y < img.height; y += 16) {
+          for (let x = 0; x < img.width; x += 16) {
+            const col = x / 16;
+            const row = y / 16;
+            ctx.fillText(`${col},${row}`, x * zoom + 2, y * zoom + 10);
+          }
+        }
+
+        card.appendChild(canvas);
+        c.appendChild(card);
+      };
+    });
+  </script>
+</body>
+</html>

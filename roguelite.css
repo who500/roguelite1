@@ -1,0 +1,1312 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Cinzel+Decorative:wght@700;900&family=Press+Start+2P&family=Outfit:wght@500;700;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #050508;
+  font-family: 'Cinzel', serif;
+  color: #e5dcc5;
+}
+
+#game-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+#game-container {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ========================================================
+   ВЕРХНЯЯ ШКАЛА ОПЫТА (ГОТИЧЕСКИЙ СТИЛЬ VAMPIRE SURVIVORS)
+   ======================================================== */
+.xp-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 24px;
+  background: #120e17;
+  border-bottom: 3px solid #2d2218;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.9), inset 0 0 8px rgba(0, 0, 0, 0.8);
+  z-index: 50;
+}
+
+.xp-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(180deg, #5eead4 0%, #0d9488 40%, #115e59 100%);
+  border-right: 2px solid #99f6e4;
+  box-shadow: 0 0 14px rgba(45, 212, 191, 0.7);
+  transition: width 0.15s ease-out;
+}
+
+.xp-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 18px;
+  pointer-events: none;
+}
+
+.lvl-badge {
+  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 900;
+  color: #fef08a;
+  text-shadow: 2px 2px 0px #3f2207, 0 0 8px rgba(250, 204, 21, 0.6);
+  letter-spacing: 1px;
+}
+
+.xp-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  color: #e2e8f0;
+  text-shadow: 1px 1px 2px #000;
+  letter-spacing: 0.5px;
+}
+
+/* ========================================================
+   ОСНОВНОЙ ИГРОВОЙ HUD (ЧЕКАННЫЙ МЕТАЛЛ И ЗОЛОТАЯ ОКАНТОВКА)
+   ======================================================== */
+#hud-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 34px 12px 14px 12px;
+  gap: 6px;
+}
+
+.hud-top-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  pointer-events: auto;
+}
+
+/* Чеканный металлический блок со скошенными углами */
+.hud-stat-box {
+  background: linear-gradient(180deg, #241a24 0%, #120c14 100%);
+  border: 2px solid #8e682e;
+  outline: 1px solid #261608;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(245, 197, 66, 0.35);
+  border-radius: 4px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Здоровье: кроваво-красный флакон / шкала */
+.hp-box {
+  min-width: 170px;
+  flex: 1.2;
+}
+
+.hp-icon {
+  font-size: 16px;
+  filter: drop-shadow(0 2px 4px rgba(239, 68, 68, 0.6));
+  display: flex;
+  align-items: center;
+}
+
+.hp-bar-outer {
+  position: relative;
+  flex: 1;
+  height: 18px;
+  min-width: 100px;
+  background: #1a0808;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1.5px solid #851e1e;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.85);
+}
+
+.hp-bar-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #f87171 0%, #dc2626 50%, #881337 100%);
+  box-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
+  transition: width 0.15s ease-out;
+}
+
+.hp-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: #ffffff;
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0 0 4px #000;
+  pointer-events: none;
+  z-index: 2;
+  letter-spacing: 0.5px;
+}
+
+/* Таймер выживания */
+.timer-box {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 13px;
+  color: #f7d58a;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 0px #2b170c;
+}
+
+/* Счетчик убитых врагов */
+.kills-box {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  color: #fca5a5;
+  text-shadow: 2px 2px 0px #2b170c;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+  transition: transform 0.15s ease;
+}
+
+.icon-btn:hover {
+  transform: scale(1.15);
+}
+
+/* Кнопка открытия Гримуара в топе */
+.codex-btn-box {
+  cursor: pointer;
+  background: linear-gradient(180deg, #2b1f13 0%, #17100b 100%);
+  border-color: #d97706;
+  color: #fef08a;
+  font-family: 'Cinzel', serif;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  transition: all 0.15s ease;
+}
+
+.codex-btn-box:hover {
+  transform: translateY(-2px);
+  border-color: #facc15;
+  box-shadow: 0 4px 14px rgba(250, 204, 21, 0.4);
+}
+
+/* ========================================================
+   СТАТУСБАР: 8 СЛОТОВ ОРУЖИЯ И 8 СЛОТОВ РЕЛИКВИЙ (RACK)
+   ======================================================== */
+.hud-inventory-rack {
+  align-self: flex-start;
+  background: rgba(14, 10, 16, 0.92);
+  border: 2px solid #5a3d1b;
+  outline: 1px solid #23160b;
+  border-radius: 6px;
+  padding: 8px 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(245, 197, 66, 0.2);
+  pointer-events: auto;
+  margin-top: 10px;
+}
+
+.rack-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.rack-title {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  font-weight: 900;
+  color: #d4af37;
+  letter-spacing: 1.5px;
+}
+
+.rack-count {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #94a3b8;
+}
+
+.rack-slots-grid {
+  display: flex;
+  gap: 6px;
+}
+
+.rack-slot {
+  width: 34px;
+  height: 34px;
+  border-radius: 4px;
+  border: 1.5px solid #4a3828;
+  background: rgba(18, 14, 22, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.8);
+}
+
+.rack-slot.empty {
+  border: 1.5px dashed rgba(120, 90, 60, 0.4);
+  background: rgba(10, 8, 14, 0.45);
+}
+
+.rack-slot.empty::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(120, 90, 60, 0.25);
+}
+
+.rack-slot.filled {
+  border-color: #c9933b;
+  background: linear-gradient(180deg, #261b24 0%, #120d14 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), inset 0 0 6px rgba(201, 147, 59, 0.2);
+}
+
+.rack-slot.synergy {
+  border-color: #f59e0b;
+  background: linear-gradient(180deg, #381f08 0%, #170d04 100%);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.7), inset 0 0 8px rgba(254, 240, 138, 0.4);
+  animation: synergyPulse 2s infinite ease-in-out;
+}
+
+@keyframes synergyPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(245, 158, 11, 0.6); }
+  50% { box-shadow: 0 0 16px rgba(254, 240, 138, 0.9); }
+}
+
+.rack-slot-icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rack-slot-icon svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7));
+}
+
+.rack-slot-lvl {
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  background: #2b180a;
+  border: 1px solid #ca8a04;
+  border-radius: 2px;
+  font-size: 7px;
+  font-family: 'Press Start 2P', monospace;
+  color: #fef08a;
+  padding: 1px 3px;
+  line-height: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.rack-slot.synergy .rack-slot-lvl {
+  border-color: #f59e0b;
+  color: #fff;
+  background: #78350f;
+}
+
+/* ========================================================
+   КОМПАКТНОЕ МОДАЛЬНОЕ ОКНО ПАУЗЫ С НЕ ШИРОКИМИ КНОПКАМИ
+   ======================================================== */
+.modal-card.pause-card {
+  max-width: 360px;
+  width: 90%;
+  padding: 24px 20px;
+  border-color: #d97706;
+  outline-color: #451a03;
+}
+
+.pause-card::before {
+  content: '✦';
+  color: #f59e0b;
+  background: #1f141f;
+}
+
+.pause-card .modal-title {
+  font-size: 26px;
+  margin-bottom: 2px;
+}
+
+.pause-card .modal-subtitle {
+  font-size: 12px;
+  margin-bottom: 18px;
+}
+
+.pause-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.pause-actions .btn-primary,
+.pause-actions .btn-secondary {
+  width: 100%;
+  max-width: 260px;
+  padding: 10px 14px;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #d97706 0%, #78350f 100%);
+  border: 2px solid #f59e0b;
+  color: #fff;
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7);
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(180deg, #f59e0b 0%, #92400e 100%);
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.5);
+}
+
+.btn-secondary {
+  background: linear-gradient(180deg, #27272a 0%, #18181b 100%);
+  border: 1px solid #52525b;
+  color: #e4e4e7;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.btn-secondary:hover {
+  background: #3f3f46;
+  border-color: #a1a1aa;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.card-icon-frame svg {
+  width: 44px;
+  height: 44px;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.7));
+}
+
+kbd {
+  background: #3b2818;
+  border: 1px solid #8e682e;
+  border-bottom: 2px solid #543916;
+  border-radius: 3px;
+  padding: 2px 6px;
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+}
+
+/* ========================================================
+   КАРТОЧНЫЙ LEVEL UP (ГОТИЧЕСКИЕ КАРТЫ С ЗОЛОТЫМ ТИСНЕНИЕМ)
+   ======================================================== */
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(4, 3, 6, 0.88);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: modalFadeIn 0.25s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-card {
+  background: linear-gradient(180deg, #1f141f 0%, #0d090e 100%);
+  border: 3px solid #b48235;
+  outline: 2px solid #36220e;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.95), inset 0 0 25px rgba(180, 130, 53, 0.2);
+  border-radius: 8px;
+  padding: 32px 30px;
+  max-width: 860px;
+  width: 92%;
+  text-align: center;
+  position: relative;
+}
+
+.modal-card::before {
+  content: '❖';
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 22px;
+  color: #f7d58a;
+  background: #1f141f;
+  padding: 0 10px;
+}
+
+.modal-title {
+  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+  font-size: 34px;
+  font-weight: 900;
+  color: #fef08a;
+  text-shadow: 3px 3px 0px #422108, 0 0 15px rgba(254, 240, 138, 0.6);
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+.modal-subtitle {
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  color: #a89f91;
+  margin-bottom: 26px;
+  letter-spacing: 0.5px;
+}
+
+/* Сетка готических карт */
+.upgrade-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px;
+}
+
+/* Сама карта: как древний манускрипт или карта Таро */
+.upgrade-card {
+  background: radial-gradient(circle at 50% 15%, #2c1c27 0%, #160e16 80%);
+  border: 2px solid #8e682e;
+  outline: 1px solid #3d2611;
+  border-radius: 6px;
+  padding: 24px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 0, 0, 0.6);
+  transition: all 0.18s ease-out;
+}
+
+.upgrade-card:hover {
+  transform: translateY(-8px);
+  border-color: #f7d58a;
+  background: radial-gradient(circle at 50% 15%, #3e2837 0%, #1f1420 80%);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9), 0 0 20px rgba(247, 213, 138, 0.4);
+}
+
+.upgrade-card:active {
+  transform: translateY(-2px);
+}
+
+/* Keyboard navigation focus highlight on upgrade cards */
+.upgrade-card.kb-focused {
+  transform: translateY(-8px);
+  border-color: #38bdf8;
+  background: radial-gradient(circle at 50% 15%, #0c2233 0%, #071220 80%);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9), 0 0 20px rgba(56, 189, 248, 0.5);
+  outline: 2px solid rgba(56, 189, 248, 0.6);
+}
+
+.upgrade-card.kb-focused::after {
+  content: 'ENTER';
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: #38bdf8;
+  opacity: 0.8;
+}
+
+/* Keyboard number badge on cards */
+.upgrade-card-number {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  background: rgba(30, 20, 40, 0.9);
+  border: 1px solid #5a3d1b;
+  border-radius: 3px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: #d4af37;
+  padding: 2px 5px;
+  line-height: 1;
+}
+
+/* Pause menu focused button */
+.pause-nav-btn.pause-focused {
+  outline: 2px solid #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+}
+
+/* Иконка в резном медальоне */
+.card-icon-frame {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #110b12;
+  border: 2px solid #c9933b;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.9), 0 4px 12px rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin-bottom: 14px;
+}
+
+.card-header-row {
+  position: absolute;
+  top: 8px;
+  left: 36px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-type-tag {
+  font-family: 'Cinzel', serif;
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.card-type-tag.tag-weapon {
+  color: #38bdf8;
+  background: rgba(2, 132, 199, 0.25);
+  border: 1px solid #0284c7;
+}
+
+.card-type-tag.tag-relic {
+  color: #facc15;
+  background: rgba(202, 138, 4, 0.25);
+  border: 1px solid #ca8a04;
+}
+
+.card-type-tag.tag-synergy {
+  color: #f43f5e;
+  background: rgba(225, 29, 72, 0.25);
+  border: 1px solid #e11d48;
+}
+
+.card-type-tag.tag-gold {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.25);
+  border: 1px solid #b45309;
+}
+
+.card-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  font-weight: 800;
+  color: #fde047;
+  background: #2b180a;
+  border: 1px solid #a16207;
+  padding: 2px 7px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+}
+
+.card-title {
+  font-family: 'Cinzel', serif;
+  font-size: 17px;
+  font-weight: 900;
+  color: #fff9e6;
+  text-shadow: 1px 1px 2px #000;
+  margin-bottom: 8px;
+}
+
+.card-desc {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #baa890;
+  line-height: 1.45;
+}
+
+/* Бейджи и карточки редкости (Common, Rare, Epic, Legendary) */
+.upgrade-card.rarity-common {
+  border-color: #64748b;
+}
+.upgrade-card.rarity-common:hover {
+  border-color: #94a3b8;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9), 0 0 18px rgba(148, 163, 184, 0.3);
+}
+.rarity-badge-common {
+  background: #1e293b !important;
+  border-color: #475569 !important;
+  color: #cbd5e1 !important;
+}
+
+.upgrade-card.rarity-rare {
+  border-color: #0284c7;
+}
+.upgrade-card.rarity-rare:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9), 0 0 20px rgba(56, 189, 248, 0.4);
+}
+.rarity-badge-rare {
+  background: #082f49 !important;
+  border-color: #0284c7 !important;
+  color: #38bdf8 !important;
+}
+
+.upgrade-card.rarity-epic {
+  border-color: #9333ea;
+}
+.upgrade-card.rarity-epic:hover {
+  border-color: #c084fc;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9), 0 0 22px rgba(192, 132, 252, 0.45);
+}
+.rarity-badge-epic {
+  background: #2e1065 !important;
+  border-color: #9333ea !important;
+  color: #d8b4fe !important;
+}
+
+.upgrade-card.rarity-legendary {
+  border-color: #d97706;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), 0 0 12px rgba(245, 158, 11, 0.25);
+}
+.upgrade-card.rarity-legendary:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9), 0 0 26px rgba(245, 158, 11, 0.6);
+}
+.rarity-badge-legendary {
+  background: #451a03 !important;
+  border-color: #d97706 !important;
+  color: #fef08a !important;
+  text-shadow: 0 0 4px rgba(245, 158, 11, 0.5);
+}
+
+.upgrade-card.gold-card {
+  background: radial-gradient(circle at 50% 15%, #332410 0%, #150f07 80%);
+  border-color: #d97706;
+}
+.upgrade-card.gold-card:hover {
+  border-color: #fbbf24;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9), 0 0 25px rgba(251, 191, 36, 0.5);
+}
+
+/* ========================================================
+   GAME OVER КАРТА (МРАЧНЫЙ КРОВАВЫЙ СКЛЕП)
+   ======================================================== */
+.gameover-card {
+  background: radial-gradient(circle at 50% 0%, #300c0c 0%, #0d070a 85%);
+  border-color: #991b1b;
+  outline-color: #450a0a;
+  box-shadow: 0 0 60px rgba(153, 27, 27, 0.4);
+  max-width: 480px;
+}
+
+.gameover-card::before {
+  content: '☠';
+  color: #ef4444;
+  background: #300c0c;
+}
+
+.gameover-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 40px;
+  font-weight: 900;
+  color: #ef4444;
+  text-shadow: 3px 3px 0px #450a0a, 0 0 25px rgba(239, 68, 68, 0.6);
+  margin-bottom: 6px;
+}
+
+.gameover-subtitle {
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  color: #d1d5db;
+  margin-bottom: 22px;
+}
+
+.stats-summary {
+  background: #14080a;
+  border: 1px solid #7f1d1d;
+  border-radius: 4px;
+  padding: 16px 20px;
+  margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.stat-row strong {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: #fef08a;
+}
+
+.btn-restart {
+  width: 100%;
+  background: linear-gradient(180deg, #991b1b 0%, #450a0a 100%);
+  border: 2px solid #ef4444;
+  outline: 1px solid #280505;
+  color: #fff;
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  font-size: 17px;
+  letter-spacing: 1.5px;
+  padding: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+  transition: all 0.15s ease;
+}
+
+.btn-restart:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(180deg, #dc2626 0%, #5f1010 100%);
+  box-shadow: 0 8px 24px rgba(220, 38, 38, 0.4);
+}
+
+/* ==========================================================
+   ДИНАМИЧЕСКИЙ ВИРТУАЛЬНЫЙ ДЖОЙСТИК (создается JS при касании)
+   ========================================================== */
+#dynamic-joystick {
+  position: fixed;
+  pointer-events: none;
+  z-index: 200;
+  touch-action: none;
+}
+
+#dj-base {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(32, 22, 36, 0.72) 0%, rgba(14, 10, 16, 0.88) 100%);
+  border: 2px solid #b48235;
+  outline: 1px solid #36220e;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.85), inset 0 0 15px rgba(180, 130, 53, 0.25);
+  position: relative;
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#dj-base::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px dashed rgba(245, 197, 66, 0.4);
+}
+
+#dj-knob {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f59e0b 0%, #b45309 60%, #451a03 100%);
+  border: 2px solid #fef08a;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.8), inset 0 2px 4px rgba(255, 255, 255, 0.5);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: transform 0.04s linear;
+  will-change: transform;
+}
+
+.joystick-base {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(32, 22, 36, 0.72) 0%, rgba(14, 10, 16, 0.88) 100%);
+  border: 2px solid #b48235;
+  outline: 1px solid #36220e;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.85), inset 0 0 15px rgba(180, 130, 53, 0.25);
+  position: relative;
+  margin: 5px;
+  backdrop-filter: blur(4px);
+}
+
+.joystick-base::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px dashed rgba(245, 197, 66, 0.4);
+}
+
+.joystick-knob {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f59e0b 0%, #b45309 60%, #451a03 100%);
+  border: 2px solid #fef08a;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.8), inset 0 2px 4px rgba(255, 255, 255, 0.5);
+  position: absolute;
+  top: 38px;
+  left: 38px;
+  pointer-events: none;
+  transition: transform 0.04s linear;
+}
+
+/* ========================================================
+   МОДАЛЬНОЕ ОКНО ГРИМУАРА / ЭНЦИКЛОПЕДИИ (CODEX MODAL)
+   ======================================================== */
+.modal-card.codex-card {
+  max-width: 860px;
+  width: 95%;
+  height: 82vh;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 26px;
+  border-color: #d97706;
+  outline-color: #451a03;
+}
+
+.codex-card::before {
+  content: '❖';
+  color: #f59e0b;
+  font-size: 20px;
+  background: #1f141f;
+  padding: 0 8px;
+}
+
+.codex-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #36220e;
+  padding-bottom: 12px;
+  text-align: left;
+  flex-shrink: 0;
+}
+
+.btn-close-modal {
+  background: #24140b;
+  border: 1.5px solid #8e682e;
+  color: #fef08a;
+  border-radius: 4px;
+  width: 34px;
+  height: 34px;
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.btn-close-modal:hover {
+  background: #78350f;
+  border-color: #f59e0b;
+  transform: scale(1.05);
+}
+
+.codex-tabs-bar {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  margin-bottom: 12px;
+  width: 100%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.codex-tab {
+  background: #19121c;
+  border: 1.5px solid #4a3828;
+  color: #a89f91;
+  font-family: 'Cinzel', serif;
+  font-weight: 800;
+  font-size: 13px;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.codex-tab:hover {
+  border-color: #b48235;
+  color: #fef08a;
+  background: #241828;
+}
+
+.codex-tab.active {
+  background: linear-gradient(180deg, #3b2410 0%, #1c1106 100%);
+  border-color: #f59e0b;
+  color: #fff9e6;
+  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.35);
+}
+
+.codex-scroll-area {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 8px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.codex-scroll-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.codex-scroll-area::-webkit-scrollbar-track {
+  background: #0f0b12;
+  border-radius: 3px;
+}
+
+.codex-scroll-area::-webkit-scrollbar-thumb {
+  background: #5a3d1b;
+  border-radius: 3px;
+}
+
+.codex-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: #8e682e;
+}
+
+/* Карточка рецепта суперсинергии */
+.codex-synergy-item {
+  position: relative;
+  background: radial-gradient(circle at 10% 50%, #291826 0%, #140d17 80%);
+  border: 1.5px solid #8e682e;
+  border-radius: 6px;
+  padding: 14px 18px;
+  text-align: left;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+  transition: all 0.15s ease;
+}
+
+.codex-synergy-item:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.25);
+}
+}
+
+.synergy-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.synergy-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.synergy-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: #0d0910;
+  border: 1.5px solid #f59e0b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+
+.synergy-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.synergy-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 17px;
+  font-weight: 900;
+  color: #fef08a;
+  text-shadow: 1px 1px 2px #000;
+}
+
+.synergy-recipe-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(10, 6, 12, 0.6);
+  border: 1px solid #3d2813;
+  border-radius: 4px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.recipe-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.recipe-tag-icon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recipe-tag-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.recipe-plus {
+  color: #f59e0b;
+  font-weight: 900;
+  font-size: 14px;
+}
+
+.recipe-arrow {
+  color: #38bdf8;
+  font-weight: 900;
+  font-size: 14px;
+}
+
+.synergy-desc {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+
+/* Сетка обычных предметов (16 оружий или 16 реликвий) */
+.codex-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.codex-item-card {
+  background: #160e18;
+  border: 1.5px solid #4a3828;
+  border-radius: 6px;
+  padding: 12px 14px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.codex-item-card:hover {
+  border-color: #8e682e;
+  background: #1f1422;
+}
+
+.codex-item-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.codex-item-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background: #0d0811;
+  border: 1px solid #7d5926;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.codex-item-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.codex-item-name {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 900;
+  color: #fff9e6;
+}
+
+.codex-item-desc {
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+.codex-item-partner {
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  color: #f59e0b;
+  font-weight: 700;
+  margin-top: auto;
+  border-top: 1px dashed #3d2813;
+  padding-top: 4px;
+}
+
+/* ========================================================
+   АДАПТИВНОСТЬ ПОД МОБИЛЬНЫЕ УСТРОЙСТВА И РАЗНЫЕ ЭКРАНЫ
+   ======================================================== */
+@media (max-width: 768px) {
+  #hud-overlay {
+    padding: 28px 12px 14px 12px;
+  }
+
+  .hud-top-bar {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .hp-box {
+    min-width: 160px;
+    flex: 1.2 1 160px;
+    padding: 4px 8px;
+  }
+
+  .hp-bar-outer {
+    min-width: 105px;
+    height: 18px;
+  }
+
+  .timer-box, .kills-box, .codex-btn-box, .audio-box, .town-link-box {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .hud-inventory-rack {
+    padding: 6px 8px;
+  }
+
+  .rack-slots-grid {
+    gap: 4px;
+  }
+
+  .rack-slot {
+    width: 28px;
+    height: 28px;
+  }
+
+  .rack-slot-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .hud-controls-tip {
+    font-size: 10px;
+    padding: 4px 10px;
+  }
+
+  .modal-title {
+    font-size: 26px;
+  }
+
+  .modal-card {
+    padding: 22px 16px;
+  }
+
+  .upgrade-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .upgrade-card {
+    padding: 14px;
+  }
+
+  .modal-card.codex-card {
+    padding: 16px 14px;
+    height: 88vh;
+    max-height: 92vh;
+  }
+
+  .codex-tabs-bar {
+    gap: 6px;
+    margin-top: 10px;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+  }
+
+  .codex-tab {
+    font-size: 11px;
+    height: 34px;
+    padding: 0 6px;
+    letter-spacing: 0.2px;
+  }
+}

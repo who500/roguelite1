@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Vampire Roguelite - Survival Arena</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Outfit:wght@400;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="roguelite.css?v=v12_rebalance_rarity_35min">
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+</head>
+<body>
+  <div id="game-wrapper">
+    <div id="game-container"></div>
+
+    <!-- Верхняя шкала опыта во весь экран -->
+    <div class="xp-container">
+      <div id="xp-bar" class="xp-bar"></div>
+      <div class="xp-label">
+        <span class="lvl-badge">LVL <span id="hud-level">1</span></span>
+        <span id="xp-text" class="xp-text">0 / 6 XP</span>
+      </div>
+    </div>
+
+    <!-- Основной HUD выживания -->
+    <div id="hud-overlay">
+      <!-- Верхняя панель: Здоровье, Таймер, Убийства, Книга, Звук -->
+      <div class="hud-top-bar">
+        <div class="hud-stat-box hp-box">
+          <div class="hp-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#ef4444" stroke="#991b1b" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="hp-bar-outer">
+            <div id="hp-bar-fill" class="hp-bar-fill"></div>
+            <div id="hp-text" class="hp-text">100 / 100</div>
+          </div>
+        </div>
+
+        <div class="hud-stat-box timer-box">
+          <div class="timer-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M6 2v6l4 4-4 4v6h12v-6l-4-4 4-4V2H6zm10 14.5l-3-3-3 3V20h6v-3.5zm-3-5l3-3V4H8v3.5l3 3z" fill="#facc15" stroke="#ca8a04" stroke-width="1"/>
+            </svg>
+          </div>
+          <div id="survival-timer" class="timer-text">00:00</div>
+        </div>
+
+        <div class="hud-stat-box kills-box">
+          <div class="kills-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2C7.58 2 4 5.58 4 10c0 3.12 1.8 5.82 4.4 7.1V20h7.2v-2.9c2.6-1.28 4.4-3.98 4.4-7.1 0-4.42-3.58-8-8-8zm-3 9a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm6 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm-4.5 6v-1.5h3V17h-3z" fill="#cbd5e1" stroke="#475569" stroke-width="1.2"/>
+            </svg>
+          </div>
+          <div id="kills-count" class="kills-text">0</div>
+        </div>
+
+
+
+
+
+      </div>
+
+      <!-- Статусбар с ячейками: 8 для оружия и 8 для реликвий ниже -->
+      <div class="hud-inventory-rack">
+        <div class="rack-header">
+          <span class="rack-title">ОРУЖИЕ</span>
+          <span id="weapon-count" class="rack-count">1/8</span>
+        </div>
+        <div class="rack-slots-grid" id="weapon-slots-grid">
+          <!-- 8 слотов оружия -->
+        </div>
+
+        <div class="rack-header" style="margin-top: 6px;">
+          <span class="rack-title">РЕЛИКВИИ</span>
+          <span id="relic-count" class="rack-count">0/8</span>
+        </div>
+        <div class="rack-slots-grid" id="relic-slots-grid">
+          <!-- 8 слотов реликвий -->
+        </div>
+      </div>
+
+      <!-- Spacer -->
+      <div style="flex: 1;"></div>
+
+      <!-- Подсказка управления снизу -->
+      <div class="hud-controls-tip">
+        <span><kbd>WASD</kbd> / Джойстик &nbsp;|&nbsp; <kbd>ESC</kbd> Меню &nbsp;|&nbsp; <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> выбор</span>
+      </div>
+    </div>
+
+    <!-- Динамический джойстик появляется при касании в JS -->
+
+    <!-- Модальное окно Паузы на ESC (компактное, не широкое) -->
+    <div id="pause-modal" class="modal-backdrop" style="display: none;">
+      <div class="modal-card pause-card">
+        <div class="modal-header">
+          <h2 class="modal-title">ПАУЗА</h2>
+          <p class="modal-subtitle">Игра приостановлена</p>
+        </div>
+
+        <div class="pause-actions">
+          <button id="btnResume" class="btn-primary pause-nav-btn" data-pause-idx="0">ПРОДОЛЖИТЬ (ESC)</button>
+          <button id="btnPauseAudio" class="btn-secondary pause-nav-btn" data-pause-idx="1">ЗВУК: ВКЛ</button>
+          <button id="btnOpenCodexFromPause" class="btn-secondary pause-nav-btn" data-pause-idx="2">ГРИМУАР</button>
+          <button id="btnRestartFromPause" class="btn-secondary pause-nav-btn" data-pause-idx="3">НАЧАТЬ ЗАНОВО</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Модальное окно Энциклопедии (Гримуар) -->
+    <div id="codex-modal" class="modal-backdrop" style="display: none;">
+      <div class="modal-card codex-card">
+        <div class="codex-header">
+          <div>
+            <h2 class="modal-title" style="font-size: 22px;">ГРИМУАР</h2>
+            <p class="modal-subtitle" style="margin-bottom: 0;">16 оружий, 16 реликвий и синергии — <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> или ← →</p>
+          </div>
+          <button id="btnCloseCodex" class="btn-close-modal" title="Закрыть (ESC)">✕</button>
+        </div>
+
+        <div class="codex-tabs-bar">
+          <button class="codex-tab active" data-tab="synergies">СИНЕРГИИ</button>
+          <button class="codex-tab" data-tab="weapons">ОРУЖИЕ</button>
+          <button class="codex-tab" data-tab="relics">РЕЛИКВИИ</button>
+        </div>
+
+        <div id="codex-scroll" class="codex-scroll-area">
+          <!-- Заполняется динамически -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Модальное окно Level Up с выбором 3 карт улучшений -->
+    <div id="levelup-modal" class="modal-backdrop" style="display: none;">
+      <div class="modal-card levelup-card">
+        <div class="modal-header">
+          <h2 class="modal-title">НОВЫЙ УРОВЕНЬ</h2>
+          <p class="modal-subtitle">Выберите усиление — <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> или ← → и Enter</p>
+        </div>
+
+        <div id="upgrade-cards" class="upgrade-cards-grid">
+          <!-- Карточки генерируются динамически -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Модальное окно Game Over -->
+    <div id="gameover-modal" class="modal-backdrop" style="display: none;">
+      <div class="modal-card gameover-card">
+        <h1 class="gameover-title">ВЫ ПОГИБЛИ</h1>
+        <p class="gameover-subtitle">Орда поглотила вас...</p>
+
+        <div class="stats-summary">
+          <div class="stat-row">
+            <span>Время выживания:</span>
+            <strong id="go-time">00:00</strong>
+          </div>
+          <div class="stat-row">
+            <span>Убито монстров:</span>
+            <strong id="go-kills">0</strong>
+          </div>
+          <div class="stat-row">
+            <span>Достигнутый уровень:</span>
+            <strong id="go-level">LVL 1</strong>
+          </div>
+        </div>
+
+        <button id="btnRestart" class="btn-restart">ИГРАТЬ СНОВА</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="roguelite.js?v=v12_rebalance_rarity_35min"></script>
+</body>
+</html>
